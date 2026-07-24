@@ -1,0 +1,154 @@
+---
+title: "HW1: Data Visualization"
+author: "Ganit - 325665651"
+output: html_document
+---
+# Homework 1
+
+### Instructions
+
+1. All assignments are individual!
+2. This assignment should be uploaded as one html file (after knit).
+3. Questions about the assignment should be asked using the Assignments forums. 
+4. Write your name and id at the top of the file 
+
+
+
+```{r, warning=FALSE, message=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+
+library(tidyverse)
+```
+
+### MPG dataset
+```{r}
+data(mpg)
+```
+
+
+```{r}
+str(mpg)
+```
+## Problem 1: Histograms
+
+Using the `mpg` dataset from `ggplot2`:
+
+- Create histograms for the variable `hwy`, grouped by vehicle `class`.
+- Briefly describe differences between the classes.
+```{r}
+ggplot(mpg,aes(x=hwy)) +
+  geom_histogram(bins=20,fill = "steelblue") + 
+  facet_wrap(~ class) + 
+  labs(title = "Fuel Efficiency in Intercity Travel for Different Vehicle Types",x="Highway Mileage",y="Number of Vehicles")
+```
+
+
+It can be seen that the 2-seater, minivan, SUV and pickup types have lower fuel efficiency when driving on the highway compared to the compact, midsize and subcompact types.
+
+
+## Problem 2: Boxplots
+
+Using the `mpg` dataset:
+
+- Create boxplots of `cty` (city mileage) grouped by `drv` (type of drive train).
+- Identify and briefly discuss any noticeable outliers.
+```{r}
+ggplot(mpg,aes(x=drv,y=cty)) +
+  geom_boxplot(fill = "indianred1") +
+  labs(title = "City Mileage for Different Drivetrain Types",x="Type of drive train",y="City Mileage")
+```
+
+
+
+It can be noted that in the F drive type there are relatively many vehicles in the upper exception. It can be concluded that in this drive type there are some vehicles that are considered very economical (since the measurement is a number of miles per gallon of fuel).
+
+
+## Problem 3: Scatterplots
+
+Using the `mpg` dataset:
+
+- Create a scatterplot of `displ` (engine displacement) vs. `hwy` (highway mileage).
+- Briefly describe the relationship.
+- Use the `class` variable to color the points and briefly discuss insights gained.
+```{r}
+ggplot(mpg,aes(x=displ, y=hwy, colour = class)) +
+  geom_point() +
+  labs(title = "Highway Mileage for different Engine Displacement",x="Engine Displacement",y = "Highway Mileage",
+       colour = "class")
+  
+```
+
+
+
+It can be seen that there is a negative correlation between engine displacement and the distance the vehicle travels per gallon of fuel. In fact, it can be seen that the larger the engine displacement, the smaller the distance the vehicle travels per gallon of fuel.
+
+After sorting by vehicle type, it can be seen that larger cars have a larger engine capacity, and therefore it can be concluded that the distance traveled using one gallon of fuel will be less than that of smaller vehicles with a smaller engine capacity.
+
+## Problem 4: 5 parameters in one graph
+- Pick 3 numerical variables and  2 categorical variable and make a visualization of them and provide an interpretation with your answer.
+```{r}
+#We will clean the column so that it only carries manual/automatic
+mpg_clean <- mpg %>% 
+  mutate(trans_type = str_extract(trans, "[:alpha:]+")) 
+
+#We will create variables for the average fuel consumption when driving on an urban road and on an interurban road for each type of drivetrain in each of the years.
+mpg_summary <- mpg %>% 
+  group_by(year,drv) %>%
+  summarise(avg_hwy = mean(hwy),avg_cty = mean(cty), .groups = 'drop')
+
+ggplot(data = mpg_clean,aes(x=factor(year))) + 
+  geom_bar(data = mpg_clean,aes(x = factor(year), fill = trans_type), position = "dodge") +
+  geom_line(data = mpg_summary, aes(y = avg_hwy, group = drv), color = "blue", size = 1) +
+  geom_line(data = mpg_summary,aes(y = avg_cty,group = drv), color = "black", size = 1) +
+  scale_y_continuous(breaks = seq(0, 100, by = 10)) +
+  labs(title = "Average fuel consumption in urban and interurban driving between 1999-2008", x = "Year", y = "Value (Count / MPG)") +
+  facet_wrap(~ drv) +
+  theme_minimal()
+
+```
+
+
+
+It can be seen that despite the general increase in the number of automatic vehicles that are perceived as more wasteful in all types of ignition, there has been an improvement in the fuel efficiency of vehicles in intercity driving, while in urban driving there is no significant change. The above change is especially noticeable in 4x4 vehicles and rear-wheel drive vehicles, and indicates that significant technological improvements have apparently been made over the years that have made the vehicles more fuel efficient. The conclusion is interesting because in the previous graphs we saw that the types of ignition in which improvement is seen are generally considered less fuel efficient than front-wheel drive vehicles.
+
+## Problem 5: Reflection and Interpretation
+
+Reflect briefly (2-3 sentences each) on the following:
+
+- Why is choosing the right visualization type crucial when exploring data?
+
+Visualization allows us to: easily understand our data, draw accurate and relatively fast conclusions, present the data and convey a message to people who do not deal with a particular field. If we choose the right visualization, all of the above will become almost immediate and make it easier to work with the data, draw conclusions and present them to the various parties.
+
+- In what ways can misleading visualizations negatively impact decision-making or understanding?
+
+Misleading visualizations can cause decision-makers (who are sometimes not experts in the field and rely entirely on the visualizations) to misunderstand the data that represents reality and subsequently make incorrect decisions that will lead to financial loss at best and harm to human life at worst.
+
+- Give an example of a situation where visualizing data helped you understand something better or changed your perspective.
+
+Visualizations often help me identify trends. For example, before investing in stocks, it is important for me to look at the graph that shows the stock's fluctuations over several months or even years. The graph helps me understand whether the stock is stable, is in a general upward trend, and whether it is worth investing in.
+
+## Problem 6: write Rcode for the following graphs
+
+### 1. write a code to plot the following plot.
+for this question use data(mpg, package="ggplot2") 
+
+![](1.png)
+```{r}
+ggplot(mpg,aes(x=class,y=cty)) +
+  geom_boxplot(fill = "plum") +
+  labs(title = "Box plot",subtitle = "City Mileage grouped by Class of vehicle",x="Class of vehicle",y="City Mileage")
+```
+
+
+### 2. write a code to plot the following plot
+for this question use data(mpg, package="ggplot2") 
+![](2.png)
+
+```{r}
+ggplot(mpg,aes(x=manufacturer, fill = class)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Histogram on Categorical Variable",subtitle = "Manufacturer across Vehicle Classes",x="manufacturer",y="count")
+```
+
