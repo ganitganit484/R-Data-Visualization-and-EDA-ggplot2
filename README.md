@@ -1,5 +1,5 @@
 # Exploratory Data Analysis & Visualization in R (`ggplot2`)
-
+**View Interactive Report:** [Live HTML Report](https://ganitganit484.github.io/R-Data-Visualization-and-EDA-ggplot2/)
 This repository contains an exploratory data analysis (EDA) and custom visualization project using the `mpg` dataset in **R** (`ggplot2`, `dplyr`). 
 
 The project demonstrates how to effectively communicate data distribution, compare numerical features across categories, and construct multi-layered graphs combining up to 5 metrics in a single view.
