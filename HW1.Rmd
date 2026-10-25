@@ -1,18 +1,5 @@
 ---
-title: "HW1: Data Visualization"
-author: "Ganit - 325665651"
 output: html_document
----
-# Homework 1
-
-### Instructions
-
-1. All assignments are individual!
-2. This assignment should be uploaded as one html file (after knit).
-3. Questions about the assignment should be asked using the Assignments forums. 
-4. Write your name and id at the top of the file 
-
-
 
 ```{r, warning=FALSE, message=FALSE}
 #knitr::opts_chunk$set(echo = TRUE)
